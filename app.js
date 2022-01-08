@@ -12,7 +12,7 @@ require("./db/connection")
 
 
 app.use("/user", require("./router/user"))
-
+app.use("/admin", require("./router/admin"))
 
 
 app.listen(port = 3000, () => {
