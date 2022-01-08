@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/MoeinTavakoli/server-jobinja/issues"
   },
-  "homepage": "https://github.com/MoeinTavakoli/server-jobinja#readme"
+  "homepage": "https://github.com/MoeinTavakoli/server-jobinja#readme",
+  "dependencies": {
+    "body-parser": "^1.19.1",
+    "express": "^4.17.2",
+    "jsonwebtoken": "^8.5.1",
+    "pg": "^8.7.1"
+  }
 }
