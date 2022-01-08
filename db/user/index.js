@@ -1,20 +1,21 @@
 const client = require('../connection')
 
-async function signup(name, skill, education, username, password) {
+async function signupDB(name, skill, education, username, password) {
   try {
     const result = await client.query(
       'INSERT INTO public.user(name, skill, education, username, password)VALUES ( $1 , $2 , $3 , $4 , $5  );',
       [name, skill, education, username, password]
     )
+    return result.rows
   } catch (error) {
     return false
   }
 }
 
-async function getdb() {
+async function loginDB(username, password) {
   try {
     const result = await client.query(
-      'SELECT * FROM "user"')
+      'SELECT * FROM "user" WHERE username = $1 AND password = $2', [username, password])
     return result.rows
   }
   catch (error) {
@@ -25,6 +26,6 @@ async function getdb() {
 
 
 module.exports = {
-  signup,
-  getdb
+  signupDB,
+  loginDB
 }

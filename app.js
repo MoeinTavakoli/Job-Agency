@@ -11,22 +11,7 @@ app.use(bodyParser.json())
 
 require("./db/connection")
 
-const { signup, getdb } = require("./db/user")
-
-app.post("/user/signup", async (req, res) => {
-    try {
-        const { name, skill, education, username, password } = req.body
-
-        const result = await signup(name, skill, education, username, password)
-        if (result == false) {
-            return res.json({ success: false, message: "user is exist !" })
-        }
-        return res.json({ success: true, message: "user successfuly added ..." })
-    } catch (error) {
-        console.log(error);
-        res.json({ error })
-    }
-})
+app.use("/user", require("./router/user"))
 
 
 app.listen(port = 3000, () => {
