@@ -3,6 +3,9 @@ const app = express()
 
 const { decodeToken, generateToken } = require("../../service/jwt")
 const { signupDB, loginDB, createJobQueue } = require("../../db/user")
+const { updateResumeUser, getResumeByID, insertResume } = require("../../db/user/resume")
+
+
 
 async function signup(req, res) {
     try {
@@ -58,8 +61,35 @@ async function createJob(req, res) {
 
 
 
+async function upsertResume(req, res) {
+    const { message, id: user_id } = req.body
+
+    const resultGet = await getResumeByID(user_id)
+    if (resultGet.rowCount == 0) {
+        // bayad insert beshe
+        const resultInsert = await insertResume(user_id, message)
+        if (resultInsert.rowCount == 0 || !resultInsert) {
+            return res.json({ success: false, message: "resume didnt inserted !" })
+        }
+        return res.json({ success: true, message: "resume inserted !" })
+    }
+    else {
+        const resultUpdate = await updateResumeUser(user_id, message)
+        if (resultUpdate.rowCount == 0 || !resultUpdate) {
+            return res.json({ success: false, message: "resume update failed !" })
+        }
+    }
+
+    res.json({ success: true, message: "resume successfully updated" })
+
+}
+
+
+
+
 module.exports = {
     signup,
     login,
-    createJob
+    createJob,
+    upsertResume
 }
