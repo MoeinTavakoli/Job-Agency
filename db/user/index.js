@@ -39,9 +39,8 @@ async function createJobQueue(user_id, title, description) {
 
 
 
-
 module.exports = {
   signupDB,
   loginDB,
-  createJobQueue
+  createJobQueue,
 }
