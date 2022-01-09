@@ -12,6 +12,7 @@ app.get("/dashboard/queue", verifyToken, queueCtl.getQueue)
 app.delete("/dashboard/queue", verifyToken, queueCtl.removeQueue)
 app.post("/dashboard/queue", verifyToken, jobCtl.createJobCtl)
 app.put("/admin/dashboard/job/:job_id", verifyToken, jobCtl.editJob)
+app.delete("/admin/dashboard/job", verifyToken, jobCtl.deleteJob)
 
 
 module.exports = app

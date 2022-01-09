@@ -30,10 +30,30 @@ async function removeJob(job_id) {
     }
 }
 
+async function getAllJob() {
+    try {
+        return await client.query("SELECT * FROM job  ",)
+    } catch (error) {
+        console.log(error);
+        return false
+    }
+}
+
+async function getJobByID(job_id) {
+    try {
+        return await client.query("SELECT * FROM job WHERE id = $1; ", [job_id])
+    } catch (error) {
+        console.log(error);
+        return false
+    }
+}
+
 
 module.exports = {
     createJob,
     updateJob,
-    removeJob
+    removeJob,
+    getAllJob,
+    getJobByID
 
 }

@@ -1,5 +1,5 @@
 const { getQueueByID, removeQueueByID } = require("../../../db/queue")
-const { createJob, updateJob } = require("../../../db/job")
+const { createJob, updateJob, removeJob } = require("../../../db/job")
 
 
 
@@ -38,7 +38,21 @@ async function editJob(req, res) {
 
 
 
+async function deleteJob(req, res) {
+    const { job_id } = req.body
+
+    const resultRemove = await removeJob(job_id)
+    if (resultRemove.rowCount == 0 || !resultRemove) {
+        return res.json({ success: false, message: "job didnt remove maybe not found !" })
+    }
+    res.json({ success: true, message: "remove was successfully !" })
+
+}
+
+
+
 module.exports = {
     createJobCtl,
-    editJob
+    editJob,
+    deleteJob
 }
