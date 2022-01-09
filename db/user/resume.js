@@ -2,7 +2,7 @@ const client = require("../connection")
 
 async function getResumeByID(user_id) {
     try {
-        return await client.query("SELECT * FROM resume WHERE user_id = $1", [user_id])
+        return await client.query("SELECT id FROM resume WHERE user_id = $1", [user_id])
     } catch (error) {
         console.log(error);
         return false
