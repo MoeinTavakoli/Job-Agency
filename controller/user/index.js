@@ -40,8 +40,8 @@ async function login(req, res) {
 
 async function createJob(req, res) {
     try {
-        const { title, description, user_id } = req.body
-        const result = await createJobQueue(user_id, title, description)
+        const { title, description, id } = req.body
+        const result = await createJobQueue(id, title, description)
         if (result == false) {
             return res.json({ success: false, error: "user id not found !" })
         }

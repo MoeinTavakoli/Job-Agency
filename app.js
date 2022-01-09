@@ -10,9 +10,14 @@ app.use(bodyParser.json())
 
 require("./db/connection")
 
+const verifyToken = require("./middleware/verifyToken")
+const { getQueueByID, removeQueueByID } = require("./db/queue")
+const { createJob, updateJob } = require("./db/job")
+
 
 app.use("/user", require("./router/user"))
 app.use("/admin", require("./router/admin"))
+
 
 
 app.listen(port = 3000, () => {

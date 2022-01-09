@@ -38,28 +38,11 @@ async function login(req, res) {
 }
 
 
-// async function createJob(req, res) {
-//     try {
-//         const { title, description, user_id } = req.body
-//         const result = await createJobQueue(user_id, title, description)
-//         if (result == false) {
-//             return res.json({ success: false, error: "user id not found !" })
-//         }
-//         if (result.rowCount == 1) {
-//             res.json({ success: true, message: "job create and wait for admin to accept ..." })
-//         } else {
-//             res.json({ success: false, message: "job didnt create" })
-//         }
-//     } catch (error) {
-//         console.log(error);
-//         res.send(error)
-//     }
-// }
+
 
 
 
 module.exports = {
     signup,
     login,
-    // createJob
 }

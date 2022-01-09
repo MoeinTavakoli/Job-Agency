@@ -1,4 +1,4 @@
-const { decodeToken } = require("../service/jwt")
+const { verify } = require("../service/jwt")
 
 function verifyToken(req, res, next) {
     if (!req.headers.authorization) {
@@ -6,13 +6,17 @@ function verifyToken(req, res, next) {
     }
     try {
         const token = req.headers.authorization
-        const id = decodeToken(token).id
-        req.body.user_id = id
+        const id = verify(token).id
+        req.body.id = id
+        if (!id || id == undefined) {
+            return res.json({ success: false, error: "token isnt valid !" })
+        }
         return next()
+
 
     } catch (error) {
         console.log(error);
-        res.json({ success: false, error: "token isnt valid !", error })
+        res.json({ success: false, error: "token isnt valid !" })
     }
 
 }
