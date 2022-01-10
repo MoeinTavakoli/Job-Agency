@@ -40,10 +40,23 @@ async function addResumeToJob(resume_id, job_id) {
     }
 }
 
+async function getResumeFromJob(job_id) {
+    try {
+        return await client.query(`SELECT resume_id FROM job WHERE id = $1`, [job_id])
+    } catch (error) {
+        console.log(error);
+        return false
+    }
+}
+
+
+
+
 
 module.exports = {
     updateResumeUser,
     getResumeByID,
     insertResume,
-    addResumeToJob
+    addResumeToJob,
+    getResumeFromJob
 }

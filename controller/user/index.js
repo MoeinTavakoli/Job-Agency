@@ -1,10 +1,14 @@
 const express = require("express")
 const app = express()
 
-const { decodeToken, generateToken } = require("../../service/jwt")
+const { generateToken } = require("../../service/jwt")
 const { signupDB, loginDB, createJobQueue } = require("../../db/user")
-const { updateResumeUser, getResumeByID, insertResume } = require("../../db/user/resume")
+const { updateResumeUser, getResumeByID, insertResume, getResumeFromJob, addResumeToJob } = require("../../db/user/resume")
+const { getJobByID } = require("../../db/job")
+const isExist = require("../../service/util/array")
 
+// getJobByID, getResumeByID, getResumeFromJob, addResumeToJob
+// isExist
 
 
 async function signup(req, res) {
@@ -85,11 +89,43 @@ async function upsertResume(req, res) {
 }
 
 
+async function sendResume(req, res) {
+    const { id: user_id } = req.body
+    const { job_id } = req.params
+    const resultJob = await getJobByID(job_id)
+    if (resultJob.rowCount == 0 || !resultJob) {
+        return res.json({ success: false, message: "job not found !" })
+    }
+    const resultResumeID = await getResumeByID(user_id)
+    if (resultResumeID.rowCount == 0 || !resultResumeID) {
+        return res.json({ success: false, message: "you didnt have resume ! please save resume" })
+    }
+    const resumeID = resultResumeID.rows[0].id
+
+    const resultResume = await getResumeFromJob(job_id)
+    const arrayResume = resultResume.rows[0].resume_id
+
+    const flagExist = isExist(arrayResume, resumeID)
+    if (flagExist) {
+        return res.json({ success: false, message: "resume is exist in this job" })
+    }
+
+    const resultAddResume = await addResumeToJob(resumeID, job_id)
+    if (resultAddResume.rowCount == 0 || !resultAddResume) {
+        return res.json({ success: false, message: "resume didnt added please wait" })
+    }
+
+    res.json({ success: true, result: "resume added ..." })
+
+}
+
+
 
 
 module.exports = {
     signup,
     login,
     createJob,
-    upsertResume
+    upsertResume,
+    sendResume
 }

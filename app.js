@@ -15,25 +15,22 @@ app.use("/admin", require("./router/admin"))
 app.use("", require("./router"))
 
 const verifyToken = require("./middleware/verifyToken")
-const { updateResumeUser, getResumeByID, insertResume } = require("./db/user/resume")
+const { updateResumeUser, getResumeByID, insertResume, addResumeToJob, getResumeFromJob } = require("./db/user/resume")
 const { getJobByID } = require("./db/job")
+const isExist = require("./service/util/array")
 
-app.post("/user/dashboard/:job_id/resume", verifyToken, (req, res) => {
-    const { id: user_id } = req.body
+
+app.get("/user/dashboard/check/:job_id", verifyToken, async (req, res) => {
     const { job_id } = req.params
-    const job = await getJobByID(job_id)
-    if (job.rowCount == 0 || !job) {
-        return res.json({ success: false, message: "job not found !" })
+    const { id: user_id } = req.body
+    const resultJob = (await getJobByID(job_id)).rows[0]
+    if (user_id != resultJob.user_id) {
+        return res.json({ success: false, message: "permission denied ! " })
     }
-
-
-
-
-
-
-    res.json({ job_id, user_id })
+    res.json({ user_id, result: resultJob })
 
 })
+
 
 
 
