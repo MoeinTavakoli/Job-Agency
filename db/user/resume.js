@@ -52,9 +52,9 @@ async function getResumeFromJob(job_id) {
 
 
 
-async function getInformationByID(user_id) {
+async function getInformationByResumeID(resume_id) {
     try {
-        return await client.query("SELECT users.id , users.name ,users.skill,users.education , resume.message from users  INNER JOIN resume ON resume.user_id = users.id WHERE user_id = $1", [user_id])
+        return await client.query("SELECT users.id , users.name ,users.skill,users.education , resume.message from users  INNER JOIN resume ON resume.user_id = users.id WHERE resume.id = $1", [resume_id])
     } catch (error) {
         console.log(error);
         return false
@@ -70,5 +70,5 @@ module.exports = {
     insertResume,
     addResumeToJob,
     getResumeFromJob,
-    getInformationByID
+    getInformationByResumeID
 }

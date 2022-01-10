@@ -18,7 +18,7 @@ const verifyToken = require("./middleware/verifyToken")
 const { updateResumeUser, getResumeByID, insertResume, addResumeToJob, getResumeFromJob } = require("./db/user/resume")
 const { getJobByID } = require("./db/job")
 const isExist = require("./service/util/array")
-
+const replacer = require("./service/util/arrayToUser")
 
 app.get("/user/dashboard/check/:job_id", verifyToken, async (req, res) => {
     const { job_id } = req.params
@@ -27,8 +27,11 @@ app.get("/user/dashboard/check/:job_id", verifyToken, async (req, res) => {
     if (user_id != resultJob.user_id) {
         return res.json({ success: false, message: "permission denied ! " })
     }
-    res.json({ user_id, result: resultJob })
-
+    const users = await replacer(resultJob.resume_id)
+    if (!users) {
+        return res.json({ success: true, users: "not yet sended resume !" })
+    }
+    res.json({ success: true, users })
 })
 
 
