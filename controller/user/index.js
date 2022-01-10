@@ -6,9 +6,7 @@ const { signupDB, loginDB, createJobQueue } = require("../../db/user")
 const { updateResumeUser, getResumeByID, insertResume, getResumeFromJob, addResumeToJob } = require("../../db/user/resume")
 const { getJobByID } = require("../../db/job")
 const isExist = require("../../service/util/array")
-
-// getJobByID, getResumeByID, getResumeFromJob, addResumeToJob
-// isExist
+const replacer = require("../../service/util/arrayToUser")
 
 
 async function signup(req, res) {
@@ -121,11 +119,28 @@ async function sendResume(req, res) {
 
 
 
+async function getUsersInformationSendedResume(req, res) {
+    const { job_id } = req.params
+    const { id: user_id } = req.body
+    const resultJob = (await getJobByID(job_id)).rows[0]
+    if (!resultJob || user_id != resultJob.user_id) {
+        return res.json({ success: false, message: "permission denied ! " })
+    }
+    const users = await replacer(resultJob.resume_id)
+    if (!users) {
+        return res.json({ success: true, users: "not yet sended resume !" })
+    }
+    res.json({ success: true, users })
+}
+
+
+
 
 module.exports = {
     signup,
     login,
     createJob,
     upsertResume,
-    sendResume
+    sendResume,
+    getUsersInformationSendedResume
 }
